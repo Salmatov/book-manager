@@ -4,6 +4,8 @@ namespace app\modules\api\service;
 
 use app\modules\api\models\Book;
 use Exception;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 /**
  *
@@ -17,7 +19,7 @@ class BookService
         /** @var Book $book */
         $book = Book::findById($bookId);
         if (!$book) {
-            throw new Exception('Book not found', 404);
+            throw new NotFoundHttpException('Book not found');
         }
         return $book;
     }
@@ -30,7 +32,7 @@ class BookService
         $book->nickName = $nickName;
 
         if (!$book->save()) {
-            throw new Exception(join(', ', $book->getErrorSummary(true)));
+            throw new BadRequestHttpException(join(', ', $book->getErrorSummary(true)));
         }
 
         return $book;
@@ -50,7 +52,7 @@ class BookService
         $book->nickName = $nickName;
 
         if (!$book->save()) {
-            throw new Exception(join(', ', $book->getErrorSummary(true)));
+            throw new BadRequestHttpException(join(', ', $book->getErrorSummary(true)));
         }
 
         return $book;

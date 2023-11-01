@@ -14,6 +14,9 @@ $config = [
     'modules' => [
         'api' => [
             'class' => 'app\modules\api\ApiModule',
+            'params' => [
+                'token' => 'superToken123'
+            ]
         ],
     ],
 

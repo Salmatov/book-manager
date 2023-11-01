@@ -6,6 +6,8 @@ use app\modules\api\models\LibraryLog;
 use DateTime;
 use Exception;
 use yii\db\ActiveQuery;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 class LogService
 {
@@ -16,7 +18,7 @@ class LogService
         /** @var LibraryLog $log */
         $log = LibraryLog::findById($logId);
         if (!$log) {
-            throw new Exception('Log not found', 404);
+            throw new NotFoundHttpException('Log not found', 404);
         }
         return $log;
     }
@@ -32,7 +34,7 @@ class LogService
         $log->estimatedReturnDate = $estimatedReturnDate;
 
         if (!$log->save()) {
-            throw new Exception(join('. ', $log->getErrorSummary(true)));
+            throw new BadRequestHttpException(join('. ', $log->getErrorSummary(true)));
         }
 
         return $log;
@@ -49,13 +51,13 @@ class LogService
         $log = LibraryLog::findByUserIdAndBookId($userId, $bookId);
 
         if ($log->returnDate != null) {
-            throw new Exception('Book is already returned');
+            throw new BadRequestHttpException('Book is already returned');
         }
 
         $log->returnDate = new \DateTime;
 
         if (!$log->save()) {
-            throw new Exception(join('. ', $log->getErrorSummary(true)));
+            throw new BadRequestHttpException(join('. ', $log->getErrorSummary(true)));
         }
 
         return $log;

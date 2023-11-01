@@ -3,6 +3,7 @@
 namespace app\modules\api\controllers\params;
 
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 class LogAddParams extends Model
 
@@ -18,7 +19,9 @@ class LogAddParams extends Model
         $this->issueDate = new \DateTime();
         $this->estimatedReturnDate = new \DateTime($params['estimatedReturnDate']);
 
-        $this->validate();
+        if (!$this->validate()) {
+            throw new BadRequestHttpException(join(' ', $this->getErrorSummary(true)));
+        }
     }
 
     public function rules(): array

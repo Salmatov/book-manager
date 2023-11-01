@@ -3,6 +3,7 @@
 namespace app\modules\api\controllers\params;
 
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 class BookUpdateParams extends Model
 {
@@ -16,7 +17,9 @@ class BookUpdateParams extends Model
         $this->bookName = $params['bookName'];
         $this->nickName = $params['nickName'];
 
-        $this->validate();
+        if (!$this->validate()) {
+            throw new BadRequestHttpException(join(' ', $this->getErrorSummary(true)));
+        }
     }
 
     public function rules()

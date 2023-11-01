@@ -3,6 +3,7 @@
 namespace app\modules\api\controllers\params;
 
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 class ReturnBookParams extends Model
 {
@@ -13,7 +14,9 @@ class ReturnBookParams extends Model
         $this->userId = $params['userId'];
         $this->bookId = $params['bookId'];
 
-        $this->validate();
+        if (!$this->validate()) {
+            throw new BadRequestHttpException(join(' ', $this->getErrorSummary(true)));
+        }
     }
 
     public function rules(): array

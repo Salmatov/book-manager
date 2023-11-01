@@ -3,6 +3,7 @@
 namespace app\modules\api\controllers\params;
 
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 
 class UserUpdateParams extends Model
 {
@@ -13,6 +14,10 @@ class UserUpdateParams extends Model
     {
         $this->firstName = $params['firstName'];
         $this->lastName = $params['lastName'];
+
+        if (!$this->validate()) {
+            throw new BadRequestHttpException(join(' ', $this->getErrorSummary(true)));
+        }
     }
 
     public function rules()

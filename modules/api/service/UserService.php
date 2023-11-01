@@ -5,6 +5,8 @@ namespace app\modules\api\service;
 use app\modules\api\models\User;
 use DateTime;
 use Exception;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 class UserService
 {
@@ -17,7 +19,7 @@ class UserService
     {
         $user = User::findById($id);
         if (!$user) {
-            throw new Exception('User not found', 404);
+            throw new NotFoundHttpException('User not found', 404);
         }
         return $user;
     }
@@ -36,7 +38,7 @@ class UserService
         $user->registrationDate = (new DateTime())->format('Y-m-d H:i:s');
 
         if (!$user->save()) {
-            throw new Exception(join(', ', $user->getErrorSummary(true)));
+            throw new BadRequestHttpException(join(', ', $user->getErrorSummary(true)));
         }
 
         return $user;
@@ -57,7 +59,7 @@ class UserService
         $user->lastName = $lastName;
 
         if (!$user->save()) {
-            throw new Exception(join(', ', $user->getErrorSummary(true)));
+            throw new BadRequestHttpException(join(', ', $user->getErrorSummary(true)));
         }
 
         return $user;
@@ -67,7 +69,7 @@ class UserService
     {
         $user = User::find()->with('logs')->where(['id' => $id])->one();
         if ($user == null) {
-            throw new Exception('User not found');
+            throw new BadRequestHttpException('User not found');
         }
         return $user;
     }
