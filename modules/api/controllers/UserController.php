@@ -8,6 +8,7 @@ use app\modules\api\controllers\params\UserUpdateParams;
 use app\modules\api\models\User;
 use app\modules\api\service\UserService;
 use Yii;
+use yii\data\ActiveDataProvider;
 
 class UserController extends RestController
 {
@@ -32,21 +33,27 @@ class UserController extends RestController
     }
 
     public function actionReader(int $id) {
-        $user = (new UserService())->getUserWithJournalById($id);
-        return $user;
+        return (new UserService())->getUserWithJournalById($id);
     }
 
     public function actionList() {
         $request = Yii::$app->request->get();
         $params = new UserListParams($request);
 
-        $user = (new UserService())->getAllUsersWithJournal($params->user_name, $params->return_date, $params->page_number, $params->page_size);
+        $query = (new UserService())->getAllUsersWithJournalQuery($params->user_name, $params->return_date);
 
-        return $user;
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'defaultPageSize' => 10,
+                'pageSize' => $params->page_size,
+                'page' => $params->page_number - 1,
+            ],
+        ]);
     }
 
     public function actionDelete($id) {
-        $user = User::findByUserId($id);
+        $user = (new UserService)->findById($id);
         $user->delete();
     }
 }

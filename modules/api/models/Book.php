@@ -3,6 +3,7 @@
 namespace app\modules\api\models;
 
 use Exception;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -18,20 +19,13 @@ class Book extends ActiveRecord
         return 'book';
     }
 
-    public static function findByBookId(int $bookId)
+    public function getLogs(): ActiveQuery
     {
-        $book = static::findOne($bookId);
-
-        if (!$book) {
-            throw new Exception('Book not found');
-        }
-
-        return $book;
+        return $this->hasMany(LibraryLog::class, ['bookId' => 'id']);
     }
 
-    public static function findByBookNickname(string $nickname){
-        return static::find()
-            ->where(['nickName' => $nickname])
-            ->one();
+    public static function findById(int $bookId): ?Book
+    {
+        return static::findOne($bookId);
     }
 }

@@ -2,9 +2,11 @@
 
 namespace app\modules\api\service;
 
+use app\modules\api\models\Book;
 use app\modules\api\models\LibraryLog;
 use DateTime;
 use Exception;
+use yii\db\ActiveQuery;
 use yii\web\BadRequestHttpException;
 
 class LogService
@@ -12,52 +14,19 @@ class LogService
     /**
      * @throws Exception
      */
-    public function validate($params): void
-    {
-        if (!$params->validate()) {
-            $errors = implode(', ', $params->getErrors());
-            throw new Exception($errors);
-        }
-    }
-
-    public static function logLoader(LibraryLog $log, $params): LibraryLog
-    {
-        $log->userId = $params->userId ?: $log->userId;
-        $log->bookId = $params->bookId ?: $log->bookId;
-        $log->issueDate = !empty($params->issueDate) ? $params->issueDate->format('Y-m-d') : $log->issueDate;
-        $log->estimatedReturnDate = !empty($params->estimatedReturnDate) ? $params->estimatedReturnDate->format('Y-m-d') : $log->estimatedReturnDate;
-        return $log;
-    }
-
-    public static function saveLog(LibraryLog $log)
-    {
-        if ($log->save()) {
-            return ['message' => 'Log created successfully'];
-        } else {
-            $errors = implode(', ', $log->getErrors());
-            throw new Exception($errors,);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function findByLogId($logId): ?LibraryLog
-    {
-        /** @var LibraryLog|null $log */
-        $log = LibraryLog::findByLogId($logId);
+    public static function findById(int $logId): LibraryLog {
+        /** @var LibraryLog $log */
+        $log = LibraryLog::findById($logId);
         if (!$log) {
             throw new Exception('Log not found', 404);
         }
         return $log;
     }
 
-    ########################################################
-
     public function createRecord(int $userId, int $bookId, DateTime $estimatedReturnDate): LibraryLog
     {
-        $user = UserService::findByUserId($userId);
-        $book = BookService::findByBookId($bookId);
+        $user = (new UserService)->findById($userId);
+        $book = (new BookService)->findById($bookId);
 
         $log = new LibraryLog();
         $log->userId = $user->id;
@@ -92,6 +61,25 @@ class LogService
         }
 
         return $log;
+    }
+
+    public function getAllLogsWithReaderAndBookQuery(?string $reader_name, ?string $book_name)
+    {
+        $query = LibraryLog::find()->with(['user', 'book']);
+
+        if ($reader_name) {
+            $query->joinWith(['user' => function (ActiveQuery $query) use ($reader_name) {
+                $query->orWhere(['like', 'firstName', $reader_name]);
+                $query->orWhere(['like', 'lastName', $reader_name]);
+            }]);
+        }
+        if ($book_name) {
+            $query->joinWith(['book' => function (ActiveQuery $query) use ($book_name) {
+                $query->andWhere(['like', 'bookName', $book_name]);
+            }]);
+        }
+
+        return $query;
     }
 
 }

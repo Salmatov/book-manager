@@ -8,6 +8,7 @@ use app\modules\api\controllers\params\BookUpdateParams;
 use app\modules\api\models\Book;
 use app\modules\api\service\BookService;
 use Yii;
+use yii\data\ActiveDataProvider;
 
 class BookController extends RestController
 {
@@ -15,15 +16,21 @@ class BookController extends RestController
         $request = Yii::$app->request->get();
         $params = new BookListParams($request);
 
-        $books = (new BookService())->getAllBooksWithJournal($params->nick_name, $params->issue_date, $params->return_date, $params->page_number, $params->page_size);
-        // @TODO нужно возвращать состояние пагинации
-        return $books;
+        $query = (new BookService())->getAllBooksWithJournalQuery($params->nick_name, $params->issue_date, $params->return_date);
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'defaultPageSize' => 10,
+                'pageSize' => $params->page_size,
+                'page' => $params->page_number - 1,
+            ],
+        ]);
     }
 
     public function actionBook($id)
     {
-        $book = (new BookService())->getBookWithJournalById($id);
-        return $book;
+        return (new BookService())->getBookWithJournalById($id);
     }
 
     public function actionAdd()
@@ -48,7 +55,7 @@ class BookController extends RestController
 
     public function actionDelete($id)
     {
-        $book = Book::findByBookId($id);
+        $book = (new BookService())->findById($id);
         $book->delete();
     }
 }

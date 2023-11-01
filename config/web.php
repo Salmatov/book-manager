@@ -15,7 +15,6 @@ $config = [
         'api' => [
             'class' => 'app\modules\api\ApiModule',
         ],
-
     ],
 
     'components' => [
@@ -23,7 +22,6 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ie4piEIG-Mv0zua0p5ITk1Adq7_uuPlT',
             'baseUrl'=>'',
-
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -68,8 +66,10 @@ $config = [
                 'PUT api/book-manager/book/<id:\d+>' => 'api/book/update',
                 'DELETE api/book-manager/book/<id:\d+>' => 'api/book/delete',
 
-                'POST api/book-manager/library/add' => 'api/library/add',
-                'POST api/book-manager/library/update/<id:\d+>' => 'api/library/update',
+                'POST api/book-manager/log/list' => 'api/log/list',
+                'POST api/book-manager/log/<id:\d+>' => 'api/log/log',
+                'POST api/book-manager/log/add' => 'api/log/add',
+                'POST api/book-manager/log/update/<id:\d+>' => 'api/log/update',
 
                 'api/book-manager/<controller:\w+>/<action:\w+>' => 'api/<controller>/<action>',
             ],

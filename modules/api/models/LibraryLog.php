@@ -4,6 +4,7 @@ namespace app\modules\api\models;
 
 use DateTime;
 use Exception;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,16 +22,25 @@ class LibraryLog extends ActiveRecord
         return 'libraryLog';
     }
 
-    public static function findByLogId(int $logId){
-        return static::find()
-            ->where(['Id' => $logId])
-            ->one();
+    public function getUser(): ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'userId']);
+    }
+
+    public function getBook(): ActiveQuery
+    {
+        return $this->hasOne(Book::class, ['id' => 'bookId']);
+    }
+
+    public static function findById(int $logId): ?LibraryLog
+    {
+        return static::findOne($logId);
     }
 
     /**
      * @param int $userId
      * @param int $bookId
-     * @return array|ActiveRecord
+     * @return LibraryLog
      * @throws Exception
      */
     public static function findByUserIdAndBookId(int $userId, int $bookId): LibraryLog
