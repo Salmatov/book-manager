@@ -20,7 +20,6 @@ class m231031_190324_create_table_libraryLog extends Migration
             'estimatedReturnDate' => $this->date()->notNull(),
             'returnDate' => $this->date()
         ]);
-
     }
 
     /**

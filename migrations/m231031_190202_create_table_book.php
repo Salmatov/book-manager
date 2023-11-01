@@ -16,9 +16,10 @@ class m231031_190202_create_table_book extends Migration
             'id' => $this->primaryKey(),
             'author' => $this->string()->notNull(),
             'bookName' => $this->string()->notNull(),
-            'nickName' => $this->string()->notNull(),
+            'nickName' => $this->string()->unique()->notNull(),
         ]);
 
+        // @TODO foreign keys
     }
 
     /**

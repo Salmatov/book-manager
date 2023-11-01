@@ -2,94 +2,48 @@
 
 namespace app\modules\api\controllers;
 
+use app\modules\api\controllers\params\UserAddParams;
+use app\modules\api\controllers\params\UserListParams;
+use app\modules\api\controllers\params\UserUpdateParams;
 use app\modules\api\models\User;
-use app\modules\api\params\UserAddParams;
-use app\modules\api\params\UserUpdateParams;
 use app\modules\api\service\UserService;
 use Yii;
 
 class UserController extends RestController
 {
-
-    public function actionTest() {
-        return 'test';
-    }
-
-
     public function actionAdd() {
-
         $request = json_decode(Yii::$app->request->getRawBody(), true);
-        $userParams = new UserAddParams($request);
-        $userService = new UserService();
+        $params = new UserAddParams($request);
 
-        try {
-            $userService->validate($userParams);
-            $user = new User();
-            $user = UserService::userLoader($user, $userParams);
-            $massage = $userService->saveUser($user);
-            Yii::$app->response->setStatusCode(201);
-            return $massage;
-        } catch (\Exception $e) {
-            Yii::$app->response->setStatusCode($e->getCode());
-            return ['errors' => $e->getMessage()];
-        }
+        $user = (new UserService())->addUser($params->firstName, $params->lastName);
 
-
+        Yii::$app->response->setStatusCode(201);
+        return $user;
     }
 
     public function actionUpdate($id) {
         $request = json_decode(Yii::$app->request->getRawBody(), true);
-        $userParams = new UserUpdateParams($request);
-        $userService = new UserService();
+        $params = new UserUpdateParams($request);
 
-        try {
-            $userService->validate($userParams);
-            $user = UserService::findByUserId($id);
-            $user = UserService::userLoader($user, $userParams);
-            $massage = $userService->saveUser($user);
-            Yii::$app->response->setStatusCode(201);
-            return $massage;
+        $user = (new UserService())->updateUser($id, $params->firstName, $params->lastName);
 
-        }
-        catch (\Exception $e) {
-
-        }
-
-        if (!$userParams->validate()) {
-            Yii::$app->response->setStatusCode(422);
-            return $userParams->errors;
-        }
-
-        $user = User::findByUserId($id);
-        $user->firstName = $userParams->firstName;
-        $user->lastName = $userParams->lastName;
-        if ($user->save()) {
-            Yii::$app->response->setStatusCode(201);
-            return ['message' => 'User updated successfully'];
-        } else {
-            Yii::$app->response->setStatusCode(422);
-            return ['errors' => $user->getErrors()];
-        }
-
+        Yii::$app->response->setStatusCode(200);
+        return $user;
     }
 
     public function actionReader(int $id) {
-        $user = User::findByUserId($id);
-        if(!$user) {
-            Yii::$app->response->setStatusCode(404);
-            return ['message' => 'User not found'];
-        }
+        $user = (new UserService())->getUserWithJournalById($id);
         return $user;
     }
 
     public function actionList() {
         $request = Yii::$app->request->get();
-        return $request['user_name'];
-        $array = User::findX($request);
-        return $request;
+        $params = new UserListParams($request);
 
+        $user = (new UserService())->getAllUsersWithJournal($params->user_name, $params->return_date, $params->page_number, $params->page_size);
+
+        return $user;
     }
-
 
     public function actionDelete($id) {
         $user = User::findByUserId($id);

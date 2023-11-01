@@ -8,7 +8,6 @@ use yii\helpers\ArrayHelper;
 class RestController extends \yii\rest\Controller
 {
     public function behaviors()
-
     {
         return ArrayHelper::merge(parent::behaviors(), [
             [
@@ -19,5 +18,4 @@ class RestController extends \yii\rest\Controller
             ],
         ]);
     }
-
 }

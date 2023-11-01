@@ -57,12 +57,17 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'POST api/book-manager/user/add' => 'api/user/add',
-                'PUT api/book-manager/user/<id:\d+>' => 'api/user/update',
-                'GET api/book-manager/user/<id:\d+>' => 'api/user/reader',
                 'GET api/book-manager/user/list' => 'api/user/list',
+                'GET api/book-manager/user/<id:\d+>' => 'api/user/reader',
+                'PUT api/book-manager/user/<id:\d+>' => 'api/user/update',
+                'DELETE api/book-manager/user/<id:\d+>' => 'api/user/delete',
+
+                'GET api/book-manager/book/list' => 'api/book/list',
+                'GET api/book-manager/book/<id:\d+>' => 'api/book/book',
                 'POST api/book-manager/book/add' => 'api/book/add',
                 'PUT api/book-manager/book/<id:\d+>' => 'api/book/update',
-                'GET api/book-manager/book/<id:\d+>' => 'api/book/reader',
+                'DELETE api/book-manager/book/<id:\d+>' => 'api/book/delete',
+
                 'POST api/book-manager/library/add' => 'api/library/add',
                 'POST api/book-manager/library/update/<id:\d+>' => 'api/library/update',
 

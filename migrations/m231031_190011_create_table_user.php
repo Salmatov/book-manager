@@ -18,6 +18,8 @@ class m231031_190011_create_table_user extends Migration
             'lastName' => $this->string()->notNull(),
             'registrationDate' => $this->date()->notNull(),
         ]);
+
+        // @TODO foreign keys
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace app\modules\api\service;
 
-use app\modules\api\models\Book;
 use app\modules\api\models\LibraryLog;
+use DateTime;
 use Exception;
+use yii\web\BadRequestHttpException;
 
 class LogService
 {
@@ -15,41 +16,35 @@ class LogService
     {
         if (!$params->validate()) {
             $errors = implode(', ', $params->getErrors());
-            throw new Exception($errors,);
+            throw new Exception($errors);
         }
     }
 
-    public static function logLoader(LibraryLog $log, $params){
-        if ($params->userId) {
-            $log->userId = $params->userId;
-        }
-        if ($params->bookId) {
-            $log->bookId = $params->bookId;
-        }
-        if ($params->issueDate) {
-            $log->issueDate = $params->issueDate->format('Y-m-d');
-        }
-        if ($params->estimatedReturnDate) {
-            $log->estimatedReturnDate = $params->estimatedReturnDate->format('Y-m-d');
-        }
+    public static function logLoader(LibraryLog $log, $params): LibraryLog
+    {
+        $log->userId = $params->userId ?: $log->userId;
+        $log->bookId = $params->bookId ?: $log->bookId;
+        $log->issueDate = !empty($params->issueDate) ? $params->issueDate->format('Y-m-d') : $log->issueDate;
+        $log->estimatedReturnDate = !empty($params->estimatedReturnDate) ? $params->estimatedReturnDate->format('Y-m-d') : $log->estimatedReturnDate;
         return $log;
-
     }
 
-    public static function saveLog(LibraryLog $log){
+    public static function saveLog(LibraryLog $log)
+    {
         if ($log->save()) {
             return ['message' => 'Log created successfully'];
         } else {
             $errors = implode(', ', $log->getErrors());
             throw new Exception($errors,);
         }
-
     }
 
     /**
      * @throws Exception
      */
-    public static function findBylogId($logId):?LibraryLog {
+    public static function findByLogId($logId): ?LibraryLog
+    {
+        /** @var LibraryLog|null $log */
         $log = LibraryLog::findByLogId($logId);
         if (!$log) {
             throw new Exception('Log not found', 404);
@@ -57,9 +52,46 @@ class LogService
         return $log;
     }
 
-    public static function registerReturnBook($log){
-        $date = new \DateTime;
-        $log->returnDate = $date->format('Y-m-d');
+    ########################################################
+
+    public function createRecord(int $userId, int $bookId, DateTime $estimatedReturnDate): LibraryLog
+    {
+        $user = UserService::findByUserId($userId);
+        $book = BookService::findByBookId($bookId);
+
+        $log = new LibraryLog();
+        $log->userId = $user->id;
+        $log->bookId = $book->id;
+        $log->estimatedReturnDate = $estimatedReturnDate;
+
+        if (!$log->save()) {
+            throw new Exception(join('. ', $log->getErrorSummary(true)));
+        }
+
+        return $log;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $bookId
+     * @return LibraryLog
+     * @throws Exception
+     */
+    public function registerReturnBook(int $userId, int $bookId): LibraryLog
+    {
+        $log = LibraryLog::findByUserIdAndBookId($userId, $bookId);
+
+        if ($log->returnDate != null) {
+            throw new Exception('Book is already returned');
+        }
+
+        $log->returnDate = new \DateTime;
+
+        if (!$log->save()) {
+            throw new Exception(join('. ', $log->getErrorSummary(true)));
+        }
+
+        return $log;
     }
 
 }
