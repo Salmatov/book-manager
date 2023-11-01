@@ -2,8 +2,6 @@
 
 namespace app\modules\api\models;
 
-use DateTime;
-use Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
@@ -32,7 +30,7 @@ class User extends ActiveRecord
 
     /**
      * @param int $id
-     * @return User
+     * @return User|null
      */
     public static function findById(int $id): ?User
     {

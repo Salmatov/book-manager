@@ -5,8 +5,6 @@ namespace app\modules\api\controllers;
 use app\modules\api\controllers\params\LogAddParams;
 use app\modules\api\controllers\params\LogListParams;
 use app\modules\api\controllers\params\ReturnBookParams;
-use app\modules\api\models\LibraryLog;
-use app\modules\api\service\BookService;
 use app\modules\api\service\LogService;
 use Yii;
 use yii\data\ActiveDataProvider;

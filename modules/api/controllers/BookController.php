@@ -5,7 +5,6 @@ namespace app\modules\api\controllers;
 use app\modules\api\controllers\params\BookAddParams;
 use app\modules\api\controllers\params\BookListParams;
 use app\modules\api\controllers\params\BookUpdateParams;
-use app\modules\api\models\Book;
 use app\modules\api\service\BookService;
 use Yii;
 use yii\data\ActiveDataProvider;

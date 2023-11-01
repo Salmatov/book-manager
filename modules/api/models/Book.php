@@ -2,7 +2,6 @@
 
 namespace app\modules\api\models;
 
-use Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 

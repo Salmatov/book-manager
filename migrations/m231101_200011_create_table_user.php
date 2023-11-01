@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m231031_190011_create_table_user
+ * Class m231101_200011_create_table_user
  */
-class m231031_190011_create_table_user extends Migration
+class m231101_200011_create_table_user extends Migration
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,6 @@ class m231031_190011_create_table_user extends Migration
             'lastName' => $this->string()->notNull(),
             'registrationDate' => $this->date()->notNull(),
         ]);
-
-        // @TODO foreign keys
     }
 
     /**
@@ -27,23 +25,7 @@ class m231031_190011_create_table_user extends Migration
      */
     public function safeDown()
     {
-        echo "m231031_190011_create_table_user cannot be reverted.\n";
         $this->dropTable('user');
-        return false;
+        return true;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m231031_190011_create_table_user cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }

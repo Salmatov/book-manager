@@ -4,6 +4,7 @@ namespace app\modules\api\controllers;
 
 
 use yii\helpers\ArrayHelper;
+use yii\web\Response;
 
 class RestController extends \yii\rest\Controller
 {
@@ -17,5 +18,11 @@ class RestController extends \yii\rest\Controller
                 ],
             ],
         ]);
+    }
+
+    public function init()
+    {
+        parent::init();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
     }
 }

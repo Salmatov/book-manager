@@ -2,12 +2,10 @@
 
 namespace app\modules\api\service;
 
-use app\modules\api\models\Book;
 use app\modules\api\models\LibraryLog;
 use DateTime;
 use Exception;
 use yii\db\ActiveQuery;
-use yii\web\BadRequestHttpException;
 
 class LogService
 {

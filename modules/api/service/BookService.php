@@ -3,7 +3,6 @@
 namespace app\modules\api\service;
 
 use app\modules\api\models\Book;
-use app\modules\api\models\User;
 use Exception;
 
 /**

@@ -5,7 +5,6 @@ namespace app\modules\api\controllers;
 use app\modules\api\controllers\params\UserAddParams;
 use app\modules\api\controllers\params\UserListParams;
 use app\modules\api\controllers\params\UserUpdateParams;
-use app\modules\api\models\User;
 use app\modules\api\service\UserService;
 use Yii;
 use yii\data\ActiveDataProvider;

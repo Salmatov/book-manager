@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m231031_190324_create_table_libraryLog
+ * Class m231101_190324_create_table_libraryLog
  */
-class m231031_190324_create_table_libraryLog extends Migration
+class m231101_190324_create_table_libraryLog extends Migration
 {
     /**
      * {@inheritdoc}
@@ -27,23 +27,7 @@ class m231031_190324_create_table_libraryLog extends Migration
      */
     public function safeDown()
     {
-        echo "m231031_190324_create_table_libraryLog cannot be reverted.\n";
         $this->dropTable('libraryLog');
-        return false;
+        return true;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m231031_190324_create_table_libraryLog cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
