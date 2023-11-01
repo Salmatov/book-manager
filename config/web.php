@@ -56,7 +56,16 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'POST api/book-manager/user/add' => 'api/user/add',
                 'PUT api/book-manager/user/<id:\d+>' => 'api/user/update',
+                'GET api/book-manager/user/<id:\d+>' => 'api/user/reader',
+                'GET api/book-manager/user/list' => 'api/user/list',
+                'POST api/book-manager/book/add' => 'api/book/add',
+                'PUT api/book-manager/book/<id:\d+>' => 'api/book/update',
+                'GET api/book-manager/book/<id:\d+>' => 'api/book/reader',
+                'POST api/book-manager/library/add' => 'api/library/add',
+                'POST api/book-manager/library/update/<id:\d+>' => 'api/library/update',
+
                 'api/book-manager/<controller:\w+>/<action:\w+>' => 'api/<controller>/<action>',
             ],
         ],

@@ -16,8 +16,7 @@ class m231031_190011_create_table_user extends Migration
             'id' => $this->primaryKey(),
             'firstName' => $this->string()->notNull(),
             'lastName' => $this->string()->notNull(),
-            'birthDate' => $this->date(),
-            'registrationDate' => $this->date(),
+            'registrationDate' => $this->date()->notNull(),
         ]);
     }
 

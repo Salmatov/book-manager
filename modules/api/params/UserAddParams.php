@@ -1,27 +1,30 @@
 <?php
 
 namespace app\modules\api\params;
-
+use DateTime;
 use yii\base\Model;
 
 class UserAddParams extends Model
 {
+    public string $firstName;
+    public string $lastName;
+    public DateTime $registrationDate;
 
-    public function __construct(
-        public string $firstName = '',
-        public string $lastName = '',
-        //public ?\DateTime $birthDate = null,
-        //public ?\DateTime $registrationDate = null
+    public function __construct(array $params)
+    {
 
-    ){}
+        $this->firstName = $params['firstName'];
+        $this->lastName = $params['lastName'];
+        $this->registrationDate = new DateTime();
+    }
 
     public function rules()
     {
         return [
-            [['firstName', 'lastName', /*'birthDate', 'registrationDate'*/], 'required'],
-            [['firstName', 'lastName'], 'string', 'max' => 255,'min' => 3],
-            //[['birthDate', 'registrationDate'], 'date', 'format' => 'php:Y-m-d'],
+            [['firstName', 'lastName', 'registrationDate'], 'required'],
+            [['firstName', 'lastName'], 'string', 'max' => 255],
         ];
     }
-
 }
+
+
