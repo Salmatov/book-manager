@@ -31,7 +31,8 @@ class LogService
         $log = new LibraryLog();
         $log->userId = $user->id;
         $log->bookId = $book->id;
-        $log->estimatedReturnDate = $estimatedReturnDate;
+        $log->issueDate = (new DateTime())->format('Y-m-d');
+        $log->estimatedReturnDate = $estimatedReturnDate->format('Y-m-d 00:00:00');
 
         if (!$log->save()) {
             throw new BadRequestHttpException(join('. ', $log->getErrorSummary(true)));

@@ -69,8 +69,8 @@ $config = [
                 'PUT api/book-manager/book/<id:\d+>' => 'api/book/update',
                 'DELETE api/book-manager/book/<id:\d+>' => 'api/book/delete',
 
-                'POST api/book-manager/log/list' => 'api/log/list',
-                'POST api/book-manager/log/<id:\d+>' => 'api/log/log',
+                'GET api/book-manager/log/list' => 'api/log/list',
+                'GET api/book-manager/log/<id:\d+>' => 'api/log/log',
                 'POST api/book-manager/log/add' => 'api/log/add',
                 'POST api/book-manager/log/update/<id:\d+>' => 'api/log/update',
 
